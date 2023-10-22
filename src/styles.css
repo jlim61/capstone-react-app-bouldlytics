@@ -1,0 +1,113 @@
+body {
+  background-color: rgb(76, 127, 139);
+}
+
+
+/* ===================================================================================Navbar Styles=================================================================================== */
+
+#heading-container {
+  padding: 0px;
+}
+
+#nav-bar {
+  padding: 0px;
+  width: 100%;
+}
+
+#nav-bar-container {
+  background-color: rgb(216, 215, 215);
+  border-bottom: 1px solid slategrey;
+}
+
+#nav-bar .navbar-brand {
+  font-size: 40px; /* Adjust the font size as needed */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  line-height: 1; /* Set to 1 or adjust as needed to match the logo's height */
+}
+
+#bouldlytics-logo {
+  height: 100px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+#navbar-stack {
+  width: 200px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#navbar-login {
+  padding: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+#navbar-signup {
+  padding: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#off-canvas-nav {
+  width: 300px;
+  background-color: rgb(231, 231, 231);
+}
+
+
+/* ===================================================================================Register Form Styles=================================================================================== */
+
+
+#register-form-header {
+  font-size: 60px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 50px;
+  color: rgb(255, 255, 240);
+}
+
+#register-form {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  margin-top: 100px;
+}
+
+#register-form-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-user-input-field {
+  height: 60px;
+  width: 300px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.register-form-label {
+  font-size: 40px;
+  font-weight: bold;
+  color: rgb(255, 255, 240);
+}
+
+.setter-button, .user-button {
+  background-color: black;
+  width: 100px;
+  font-size: 25px;
+}
+
+#register-form-sign-up {
+  height: 50px;
+  width: 180px;
+  font-size: 30px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
