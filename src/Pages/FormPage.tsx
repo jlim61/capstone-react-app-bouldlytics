@@ -1,9 +1,9 @@
-import RegisterForm from '../Components/Forms/RegisterForm'
 
-export default function FormPage() {
+
+export default function FormPage(props: { children: JSX.Element }) {
   return (
     <>
-        <RegisterForm />
+        { props.children }
     </>
   )
 }

@@ -3,6 +3,13 @@ import Container from "react-bootstrap/esm/Container"
 import Heading from "./Components/Heading"
 import FormPage from "./Pages/FormPage"
 import HomePage from "./Pages/HomePage"
+import RegisterForm from "./Components/Forms/RegisterForm"
+import LoginForm from "./Components/Forms/LoginForm"
+import Logout from "./Components/Logout"
+import SocialPage from "./Pages/SocialPage"
+import Users from "./Components/Users"
+import MoonboardPage from "./Pages/MoonboardPage"
+import UserPage from "./Pages/UserPage"
 
 function App(): JSX.Element {
 
@@ -13,7 +20,12 @@ function App(): JSX.Element {
         <Heading />
         <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/register" element={<FormPage />} />
+        <Route path="/moonboard" element={<MoonboardPage />} />
+        <Route path="/user-page" element={<UserPage />} />
+        <Route path="/users" element={<SocialPage><Users /></SocialPage>} />
+        <Route path="/register" element={<FormPage><RegisterForm /></FormPage>} />
+        <Route path="/login" element={<FormPage><LoginForm /></FormPage>} />
+        <Route path='/logout' element={<Logout />}/>
         <Route path="*" element={<Navigate to='/' />} />
       </Routes>
       </Container>
@@ -24,4 +36,4 @@ function App(): JSX.Element {
 
 export default App
 
-// w9d2full 01:30:35
+// w9d3 01:03:53

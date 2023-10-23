@@ -1,18 +1,14 @@
-import Col from "react-bootstrap/esm/Col";
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ToggleButton from 'react-bootstrap/ToggleButton';
+import { useNavigate } from "react-router-dom";
+import { User } from '../../types';
 
-type User = {
-  username: string
-  email: string
-  password: string
-  first_name?: string
-  last_name?: string
-  setter: boolean
-}
+
 
 export default function RegisterForm() {
+
+  const navigate = useNavigate()
 
   const [userValue, setUserValue] = useState('1');
 
@@ -28,8 +24,15 @@ export default function RegisterForm() {
   const lastNameField = useRef<HTMLInputElement>(null)
   const isSetter = userValue === '2' // should return "true" value if "setter" selected, false if "user" selected
 
+  useEffect(()=>{
+    if(localStorage.getItem('token')){
+      navigate('/')
+    }
+  },[])
+
   async function handleRegisterData(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+
     const user =  {
       username: usernameField.current!.value,
       email: emailField.current!.value,
@@ -44,9 +47,19 @@ export default function RegisterForm() {
       if (lastNameField.current?.value) {
         user.last_name = lastNameField.current.value;
       }
-      registerUser(user)
+      clearFormData() // reset values on input fields to blank
+      setUserValue('1') // reset radio button to selecting user
+      await registerUser(user)
     }
-  
+
+    function clearFormData() {
+      usernameField.current!.value = ''
+      emailField.current!.value = ''
+      passwordField.current!.value = ''
+      firstNameField.current!.value = ''
+      lastNameField.current!.value = ''
+
+    }
 
     async function registerUser(user: User){
       console.log(user)
@@ -55,21 +68,19 @@ export default function RegisterForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
       })
-      if (!res.ok){
-        window.alert('Register Failed')
-        
-      }
       const data = await res.json()
       console.log(data)
+      if (!res.ok){
+        window.alert('Register Failed')
+      } else navigate('/')
+
     }
 
   return (
     <>
-    <h1 id="register-form-header">Start Your Journey Today!</h1>
-    <Col>
     <form id="register-form" onSubmit={handleRegisterData}>
-        <img id="register-boulder-image" src="register-boulder-image.png" alt="" />
         <div id="register-form-div">
+            <h3 id="login-header">Register</h3><br /><br /><br />
             <label className="register-form-label" htmlFor="username">Username</label>
             <input className="register-user-input-field" type="text" name="username" ref={usernameField} required />
             <label className="register-form-label" htmlFor="email">Email</label>
@@ -101,7 +112,6 @@ export default function RegisterForm() {
             <input id="register-form-sign-up" type="submit" value='Sign Up' />
         </div>
     </form>
-    </Col>
     </>
   )
 }
