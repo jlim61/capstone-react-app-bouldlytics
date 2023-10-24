@@ -22,3 +22,9 @@ export type LoggedUser = {
   token: string
   username: string
 }
+
+export type Holds = {
+  starting_holds: string[]
+  usable_holds: string[]
+  finish_holds: string[]
+}

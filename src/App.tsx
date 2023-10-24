@@ -9,19 +9,21 @@ import Logout from "./Components/Logout"
 import SocialPage from "./Pages/SocialPage"
 import Users from "./Components/Users"
 import MoonboardPage from "./Pages/MoonboardPage"
-import UserPage from "./Pages/UserPage"
+import MyDataPage from "./Pages/MyDataPage"
+import HoldsContextProvider from "./Contexts/HoldsContextProvider"
 
 function App(): JSX.Element {
 
   return (
     <>
     <BrowserRouter>
+      <HoldsContextProvider>
       <Container fluid id="heading-container">
         <Heading />
         <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/moonboard" element={<MoonboardPage />} />
-        <Route path="/user-page" element={<UserPage />} />
+          <Route path="/moonboard" element={<MoonboardPage />} />
+        <Route path="/my-data/:username" element={<MyDataPage />} />
         <Route path="/users" element={<SocialPage><Users /></SocialPage>} />
         <Route path="/register" element={<FormPage><RegisterForm /></FormPage>} />
         <Route path="/login" element={<FormPage><LoginForm /></FormPage>} />
@@ -29,6 +31,7 @@ function App(): JSX.Element {
         <Route path="*" element={<Navigate to='/' />} />
       </Routes>
       </Container>
+      </HoldsContextProvider>
     </BrowserRouter>
     </>
   )

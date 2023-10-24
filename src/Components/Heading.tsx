@@ -72,7 +72,7 @@ export default function Heading() {
             <Nav.Link id="navbar-logout" as={NavLink} to="/logout">Logout</Nav.Link>
           </Nav.Item>
             <Nav className="d-flex flex-column">
-            <Nav.Link href="/user-page">My Data</Nav.Link>
+            <Nav.Link href="/my-data">My Data</Nav.Link>
             <Nav.Link href="#action1">Gym Boulders</Nav.Link>
             <Nav.Link href="/moonboard">MoonBoard Boulders</Nav.Link>
             <Nav.Link href="#action2">Training</Nav.Link>

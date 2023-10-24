@@ -58,7 +58,7 @@ body {
 
 #off-canvas-nav {
   width: 300px;
-  background-color: rgb(231, 231, 231);
+  background-color: rgb(215, 217, 219);
 }
 
 
@@ -218,6 +218,16 @@ body {
   padding-top: 10px;
 }
 
+.username-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.username-link:hover {
+  color: white;
+  font-size: 20px;
+}
+
 
 /* ===================================================================================MoonBoard Styles=================================================================================== */
 
@@ -229,6 +239,19 @@ body {
   height: 1023px;
   margin-top: 100px;
 }
+* {
+  box-sizing: border-box;
+}
+#moonboard-holds-container {
+  border: 1px black solid;
+  height: 925px;
+  width: 580px;
+  margin-top: 60px;
+  margin-left: 65px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
 #moonboard-aligner {
   display: flex;
@@ -238,21 +261,13 @@ body {
 #moonboard-input-fields-container {
   display: flex;
   flex-direction: column;
-  margin-top: 25%;
+  margin-top: 18%;
 }
 
-.moonboard-hold {
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
-}
 
-#A18 {
-  border-radius: 50%;
-  height: 50px;
-  width: 50px;
-  margin-top: 70px;
-  margin-left: 73px;
+#hold-radio-buttons {
+  margin-bottom: 50px;
+  background-color: black;
 }
 
 #all-moonboard-boulders-div {
@@ -270,4 +285,16 @@ body {
 .moonboard-column {
   text-align: center;
   padding-top: 10px;
+}
+
+.project-boulder-follow-button {
+  background-color: rgb(51, 96, 179);
+  color: white;
+  border-color: transparent;
+}
+
+.project-boulder-follow-button:hover {
+  background-color: rgb(51, 170, 179);
+  color: white;
+  border-color: transparent;
 }

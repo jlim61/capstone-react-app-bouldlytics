@@ -9,7 +9,6 @@ export default function LoginForm() {
 
   const navigate = useNavigate()
   const {user, setUser} = useContext(UserContext)
-  console.log(user, 'from login page')
 
   const usernameField = useRef<HTMLInputElement>(null)
   const passwordField = useRef<HTMLInputElement>(null)
@@ -47,10 +46,12 @@ export default function LoginForm() {
       const data = await res.json()
       console.log(data)
       const accessToken = data.access_token
-      const username = loginInfo.username ? loginInfo.username : ''
+      const setterStatus = data.setter
+      const username = loginInfo.username!
       setUser({token: accessToken, username: username})
       localStorage.setItem('token', accessToken)
-      localStorage.setItem('username', loginInfo.username!) //maybe not use here, maybe in useContext
+      localStorage.setItem('username', loginInfo.username!)
+      localStorage.setItem('setter', setterStatus)
     } else window.alert('Failed Login')
   }
 

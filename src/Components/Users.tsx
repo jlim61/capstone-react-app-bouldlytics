@@ -6,6 +6,7 @@ import Col from "react-bootstrap/esm/Col";
 import Button from "react-bootstrap/esm/Button";
 import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import ToggleButton from "react-bootstrap/esm/ToggleButton";
+import { Link } from 'react-router-dom'
 
 export default function Users() {
 
@@ -104,12 +105,12 @@ export default function Users() {
                 ) : null}
               </Col>
               <Col className="users-column">
-                {user.username}
+                <Link className="username-link" to={`/my-data/${user.username}`}>{user.username}</Link>
               </Col>
               <Col className="users-column">{user.email}</Col>
               <Col className="users-column">
                 {localStorage.getItem('token') && (
-                  <Button onClick={followUser}>Follow</Button>
+                  <Button className='project-boulder-follow-button' onClick={followUser}>Follow</Button>
                 )}
               </Col>
             </Row>
