@@ -24,7 +24,7 @@ export default function Heading() {
   },[user])
 
   return (
-    <div>
+    <div className="sticky-navbar">
       <Navbar id="nav-bar" className="bg-body-tertiary" expand="xxl">
         <Container fluid id="nav-bar-container">
           <div className="d-flex w-100">
@@ -72,7 +72,7 @@ export default function Heading() {
             <Nav.Link id="navbar-logout" as={NavLink} to="/logout">Logout</Nav.Link>
           </Nav.Item>
             <Nav className="d-flex flex-column">
-            <Nav.Link href="/my-data">My Data</Nav.Link>
+            <Nav.Link href="/my-data/:username">My Data</Nav.Link>
             <Nav.Link href="#action1">Gym Boulders</Nav.Link>
             <Nav.Link href="/moonboard">MoonBoard Boulders</Nav.Link>
             <Nav.Link href="#action2">Training</Nav.Link>

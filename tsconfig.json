@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "src/Pages/MyDataPage.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

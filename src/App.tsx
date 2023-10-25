@@ -11,6 +11,7 @@ import Users from "./Components/Users"
 import MoonboardPage from "./Pages/MoonboardPage"
 import MyDataPage from "./Pages/MyDataPage"
 import HoldsContextProvider from "./Contexts/HoldsContextProvider"
+import UserProfilePage from "./Pages/UserProfilePage"
 
 function App(): JSX.Element {
 
@@ -23,7 +24,8 @@ function App(): JSX.Element {
         <Routes>
         <Route path="/" element={<HomePage />} />
           <Route path="/moonboard" element={<MoonboardPage />} />
-        <Route path="/my-data/:username" element={<MyDataPage />} />
+        <Route path="/my-data" element={<MyDataPage />} />
+        <Route path="/user-profile/:username" element={<UserProfilePage />} />
         <Route path="/users" element={<SocialPage><Users /></SocialPage>} />
         <Route path="/register" element={<FormPage><RegisterForm /></FormPage>} />
         <Route path="/login" element={<FormPage><LoginForm /></FormPage>} />
