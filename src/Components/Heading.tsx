@@ -54,7 +54,7 @@ export default function Heading() {
 
       <Offcanvas id="off-canvas-nav" show={showOffcanvas} onHide={handleOffcanvasToggle} placement="start">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title id="offcanvasNavbarLabel-expand">Bouldlytics</Offcanvas.Title>
+          <Offcanvas.Title id="offcanvasNavbarLabel-expand" className="offcanvas-heading"><Nav.Link href="/">Bouldlytics</Nav.Link></Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
         <Nav className="justify-content-between flex-grow-1 pe-3">
@@ -62,21 +62,22 @@ export default function Heading() {
         { !localStorage.getItem('token') ?
               <>
           <Nav.Item>
-            <Nav.Link href="/login">Login</Nav.Link>
+            <Nav.Link className="offcanvas-user-button offcanvas-links" href="/login">Login</Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link href="/register">Sign Up</Nav.Link>
+            <Nav.Link className="offcanvas-user-button offcanvas-links" href="/register">Sign Up</Nav.Link>
           </Nav.Item> </>:
           <>
           <Nav.Item>
-            <Nav.Link id="navbar-logout" as={NavLink} to="/logout">Logout</Nav.Link>
+            <Nav.Link className="offcanvas-user-button offcanvas-links" as={NavLink} to="/logout">Logout</Nav.Link>
           </Nav.Item>
             <Nav className="d-flex flex-column">
-            <Nav.Link href="/my-data/:username">My Data</Nav.Link>
-            <Nav.Link href="#action1">Gym Boulders</Nav.Link>
-            <Nav.Link href="/moonboard">MoonBoard Boulders</Nav.Link>
-            <Nav.Link href="#action2">Training</Nav.Link>
-            <Nav.Link href="/users">Find Boulderers</Nav.Link>
+            <Nav.Link href="/my-data" className="offcanvas-links offcanvas-items">My Data</Nav.Link>
+            <Nav.Link href="/bouldering-info" className="offcanvas-links offcanvas-items">What is Bouldering?</Nav.Link>
+            <Nav.Link href="#action1" className="offcanvas-links offcanvas-items">Gym Boulders</Nav.Link>
+            <Nav.Link href="/moonboard" className="offcanvas-links offcanvas-items">MoonBoard Boulders</Nav.Link>
+            <Nav.Link href="#action2" className="offcanvas-links offcanvas-items">Training</Nav.Link>
+            <Nav.Link href="/users" className="offcanvas-links offcanvas-items">Find Boulderers</Nav.Link>
           </Nav>
           </>
         }

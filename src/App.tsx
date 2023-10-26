@@ -12,6 +12,7 @@ import MoonboardPage from "./Pages/MoonboardPage"
 import MyDataPage from "./Pages/MyDataPage"
 import HoldsContextProvider from "./Contexts/HoldsContextProvider"
 import UserProfilePage from "./Pages/UserProfilePage"
+import BoulderingInfoPage from "./Pages/BoulderingInfoPage"
 
 function App(): JSX.Element {
 
@@ -24,6 +25,7 @@ function App(): JSX.Element {
         <Routes>
         <Route path="/" element={<HomePage />} />
           <Route path="/moonboard" element={<MoonboardPage />} />
+        <Route path="/bouldering-info" element={<BoulderingInfoPage />} />
         <Route path="/my-data" element={<MyDataPage />} />
         <Route path="/user-profile/:username" element={<UserProfilePage />} />
         <Route path="/users" element={<SocialPage><Users /></SocialPage>} />
