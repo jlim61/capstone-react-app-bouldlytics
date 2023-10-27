@@ -8,13 +8,18 @@ import { Link, useNavigate } from "react-router-dom";
 
 
 export default function MoonboardPage() {
+  
 
     const navigate = useNavigate()
 
     const [moonboardBoulders, setMoonboardBoulders] = useState<Array<Partial<MoonboardBoulder>>>([])
-
+    const [userData, setUserData] = useState<Array<Partial<BoulderProject>>>([])
     const { holds, setHolds } = useContext(HoldsContext)
     const [holdRadioValue, setHoldRadioValue] = useState('1')
+    const [loading, setLoading] = useState(true);
+    const [rerenderTrigger, setRerenderTrigger] = useState(false);
+
+
     
     const holdRadios = [
       { name: 'Starting Hold(s)', value: '1' },
@@ -28,6 +33,19 @@ export default function MoonboardPage() {
     const usableHoldsField = useRef<HTMLInputElement>(null)
     const finishHoldsField = useRef<HTMLInputElement>(null)
     const mbConfigField = useRef<HTMLInputElement>(null)
+
+    async function getUserInfo(){
+      const username = localStorage.getItem('username')
+      const res = await fetch(`https://bouldering-capstone.onrender.com/user/${username}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json',
+       }
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setUserData(data)
+      } else console.log('fetch was unsuccessful')
+    }    
 
     async function handleBoulderData(e: React.FormEvent<HTMLFormElement>) {
       e.preventDefault()
@@ -69,10 +87,6 @@ export default function MoonboardPage() {
     }
 
 
-    useEffect(() => {
-        getMoonboardBoulders()
-    }, [])
-
     const accessToken = localStorage.getItem('token')
 
     // getting all moonboard boulders
@@ -96,7 +110,95 @@ export default function MoonboardPage() {
         return holds.join(", ");
       }
 
-      function projectBoulder(){}
+      async function projectBoulder(boulderID){
+        console.log('Projecting boulder with ID:', boulderID);
+        const res = await fetch(`https://bouldering-capstone.onrender.com/user/project/${boulderID}`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        if (res.ok) {
+          console.log('boulder projected')
+          setRerenderTrigger(true)
+        } else window.alert('Failed to project boulder')
+      }
+
+      function isUserProjectingBoulder(userId, boulderId) {
+        if (userData && userData.moonboard_info) {
+          return userData.moonboard_info.some(
+            (info) => info.user_id == userId && info.boulder_id == boulderId
+          );
+        }
+        return false;
+      }
+      
+      
+      
+
+      async function removeProject(boulderID) {
+        console.log('Removing projected boulder with ID:', boulderID);
+        const matchingProject = userData.moonboard_info.find(
+          (info) => info.boulder_id == boulderID && info.user_id == userData.id
+        );
+      
+        if (!matchingProject) {
+          window.alert('Matching project not found');
+          return;
+        }
+      
+        const res = await fetch(`https://bouldering-capstone.onrender.com/user/project/${matchingProject.id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+      
+        if (res.ok) {
+          setRerenderTrigger(true)
+          console.log('Projected boulder successfully removed');
+        } else {
+          window.alert('Failed to remove projected boulder');
+        }
+      }
+      
+      useEffect(() => {
+        async function fetchData() {
+          try {
+            const response = await fetch('https://bouldering-capstone.onrender.com/moonboard_boulder', {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+              }
+            });
+            const data = await response.json();
+            setMoonboardBoulders(data);
+            setLoading(false)
+          } catch (error) {
+            console.error('Error fetching data: ', error);
+          }
+        }
+        fetchData();
+      }, []);
+
+      useEffect(() => {
+        // console.log('useEffect called')
+          getMoonboardBoulders()
+          // console.log('got moonboard info')
+          getUserInfo()
+          // console.log('got user info')
+  
+          setRerenderTrigger(true)
+          setRerenderTrigger(false)
+      }, [rerenderTrigger])
+  
+      useEffect(() => {
+        console.log('userData changed:', userData);
+      }, [userData])
+      
 
       return (
         <div>
@@ -154,7 +256,7 @@ export default function MoonboardPage() {
                 <label htmlFor="">Finish Hold(s)</label>
                 <input type="text" ref={finishHoldsField} value={holds.finish_holds} /><br />
                 <label htmlFor="">MoonBoard Configuration</label>
-                <input type="text" ref={mbConfigField} /><br /><br />
+                <input type="text" ref={mbConfigField} defaultValue="MoonBoard 2016 (40° MoonBoard)" /><br /><br />
                 <input type="submit" value='Create Boulder' />
               </form>
             </div> : <></>}
@@ -186,7 +288,7 @@ export default function MoonboardPage() {
               <strong>Project This Boulder</strong>
             </Col>
           </Row>
-          <div id="all-moonboard-boulders-div">
+          <div key={rerenderTrigger} id="all-moonboard-boulders-div">
             {moonboardBoulders.map((boulder: Partial<MoonboardBoulder>) => (
                 <Row key={boulder.id}>
                     <Col className="moonboard-column">
@@ -205,17 +307,23 @@ export default function MoonboardPage() {
                     {formatHolds(boulder.finish_hold!)}
                     </Col>
                     <Col className="moonboard-column">
-                    <Link className="username-link" to={`/my-data/${boulder.setters.username}`}>{boulder.setters.username}</Link>
+                    <Link className="username-link" to={`/user-profile/${boulder.setters.username}`}>{boulder.setters.username}</Link>
                     </Col>
                     <Col className="moonboard-column">
                         {boulder.moonboard_configuration}
                     </Col>
                     <Col className="moonboard-column">
-                {localStorage.getItem('token') && (
-                  <Button className='project-boulder-follow-button' onClick={projectBoulder}>Project</Button>
-                )}
-              </Col>
-                </Row>
+                    {localStorage.getItem('token') && isUserProjectingBoulder(userData.id, boulder.id) ? (
+                      <Button onClick={() => removeProject(boulder.id)} className='projecting-boulder-follow-button'>
+                        Projecting
+                      </Button>
+                    ) : (
+                      <Button className='project-boulder-follow-button' onClick={() => projectBoulder(boulder.id)}>
+                        Project
+                      </Button>
+                    )}
+                    </Col>
+              </Row>
             ))}
           </div>
         </Container>

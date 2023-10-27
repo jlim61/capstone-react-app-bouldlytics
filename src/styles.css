@@ -6,6 +6,74 @@ body {
 
 /* ===================================================================================Homepage Styles=================================================================================== */
 
+#data-row {
+  margin-left: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.homepage-button {
+  height: 600px;
+  width: 600px;
+  border: 10px solid black;
+  border-radius: 50%;
+}
+
+#data-icon {
+  margin-left: 150px;
+}
+
+.data-body {
+  font-size: 30px;
+  padding: 10px;
+  color: white;
+}
+
+.gym-body {
+  font-size: 30px;
+  margin-right: 100px;
+  color: white;
+}
+
+#gym-row {
+  margin-left: 50px;
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#progress-row {
+  margin-left: 50px;
+  margin-top: 50px;
+  margin-bottom: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress-body {
+  font-size: 30px;
+  margin-right: 100px;
+  color: white
+}
+
+.bouldlytics-body {
+  color: white;
+  font-size: 30px;
+  padding-top: 10px;
+}
+
+
+/* ===================================================================================What Is Bouldering Styles=================================================================================== */
+
+#align-equipment-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #sidebar-col {
   position: fixed;
 }
@@ -18,14 +86,14 @@ body {
 
 #homepage-row1 {
   margin-left: 50px;
-  margin-right: 100px;
+  margin-right: 50px;
   margin-bottom: 150px;
   color: white;
 }
 
 #bouldering-info-row2{
   margin-left: 50px;
-  margin-right: 100px;
+  margin-right: 50px;
 }
 
 .wib-image {
@@ -377,7 +445,7 @@ body {
   box-sizing: border-box;
 }
 #moonboard-holds-container {
-  border: 1px black solid;
+  /* border: 1px black solid; */
   height: 925px;
   width: 580px;
   margin-top: 60px;
@@ -433,6 +501,18 @@ body {
   border-color: transparent;
 }
 
+.projecting-boulder-follow-button {
+  background-color: rgb(51, 170, 179);
+  color: white;
+  border-color: transparent;
+}
+
+.projecting-boulder-follow-button:hover {
+  background-color: rgb(51, 96, 179);
+  color: white;
+  border-color: transparent;
+}
+
 
 /* ===================================================================================My Data Styles=================================================================================== */
 
@@ -443,54 +523,167 @@ body {
   margin-right: 10%;
 }
 
-.user-average-stats-row {
-  display: flex;
-  justify-content: space-between;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.average-climbing-data {
-  text-align: end;
+.average-climbing-stats{
+  margin-top: 10px;
+  font-size: 20px;
 }
 
 #box1 {
   border: 1px black solid;
+  background-color: rgb(215, 217, 219);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #box2 {
   border: 1px black solid;
   margin-top: 20px;
+  background-color: rgb(215, 217, 219);
 }
 
 #box3 {
   border: 1px black solid;
+  background-color: rgb(215, 217, 219);
 }
 
 #box4 {
   border: 1px black solid;
   margin-top: 20px;
+  background-color: rgb(215, 217, 219);
 }
 
 #box5 {
   border: 1px black solid;
   margin-top: 20px;
+  background-color: rgb(215, 217, 219);
 }
+
 
 .project-row {
   width: 100%;
 }
 
 .project-grade {
-  width: 50%;
+  /* width: 50%; */
 }
 
-.attempts-plus1 {
-
+.project-entry {
+  border-bottom: 1px solid black;
 }
 
 .attempts-adjust-input {
   margin-left: 20px;
   margin-right:10px;
   width: 40px;
+}
+
+.boulder-entry {
+  padding-left: 10px;
+}
+
+#user-profile-boulders-tag {
+  padding-top: 10px;
+  padding-left: 10px
+}
+
+#completed-projects-tag, #pending-projects-tag {
+  padding-top: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 1px solid black;
+}
+
+.project-text {
+  font-size: 18px;
+}
+
+.remove-project-button {
+  margin-bottom: 10px;
+}
+
+.delete-boulder-button {
+  margin-bottom: 10px;
+}
+
+#progress-circle-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+#progress-label {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.progress-circle {
+  width: 100px;
+  height: 100px;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 10;
+}
+
+.circle {
+  fill: none;
+  stroke-width: 10;
+  stroke-dasharray: 283;
+  stroke-dashoffset: calc(283 - (var(--completion, 0%) * 283 / 100));
+  transition: stroke-dashoffset 1s;
+}
+
+.circle.red {
+  stroke: red;
+}
+
+.circle.pinkish-red {
+  stroke: #f57171;
+}
+
+.circle.orangish-yellow {
+  stroke: #ffcc00;
+}
+
+.circle.yellowish-lime-green {
+  stroke: #adff2f;
+}
+
+.circle.green {
+  stroke: #00ff00;
+}
+
+.percentage {
+  fill: #333;
+  font-size: 20px;
+  font-weight: bold;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.profile-picture {
+  border: 1px solid transparent;
+  border-radius: 50%;
+}
+
+/* ===================================================================================Footer Styles=================================================================================== */
+
+#footer-row {
+  padding-top: 50px;
+  margin-top: 100px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.foot-column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
 }

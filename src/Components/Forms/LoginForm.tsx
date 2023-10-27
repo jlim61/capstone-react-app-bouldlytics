@@ -47,11 +47,13 @@ export default function LoginForm() {
       console.log(data)
       const accessToken = data.access_token
       const setterStatus = data.setter
+      const userID = data.id
       const username = loginInfo.username!
       setUser({token: accessToken, username: username})
       localStorage.setItem('token', accessToken)
       localStorage.setItem('username', loginInfo.username!)
       localStorage.setItem('setter', setterStatus)
+      localStorage.setItem('id', userID)
     } else window.alert('Failed Login')
   }
 

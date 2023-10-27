@@ -105,7 +105,9 @@ export default function Users() {
                 ) : null}
               </Col>
               <Col className="users-column">
-                <Link className="username-link" to={`/user-profile/${user.username}`}>{user.username}</Link>
+                <Link className="username-link" to=
+                {localStorage.getItem('username') == user.username ?
+                  '/my-data' : `/user-profile/${user.username}`}>{user.username}</Link>
               </Col>
               <Col className="users-column">{user.email}</Col>
               <Col className="users-column">

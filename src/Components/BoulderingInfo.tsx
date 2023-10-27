@@ -67,7 +67,7 @@ export default function BoulderingInfo() {
         </Col>
       </Row>
       <Row id="bouldering-info-row3">
-        <Col>
+        <Col id="align-equipment-text">
           <div>
             <div id="equipment" className="card-header">Equipment: Climbing Essentials for Every Boulderer</div>
             <div className="card-body">

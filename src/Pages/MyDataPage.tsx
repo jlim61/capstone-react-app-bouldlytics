@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { BoulderProject } from "../types"
 import { Button, Col, Row } from "react-bootstrap"
+import { useNavigate } from "react-router-dom";
 
 export default function MyDataPage() {
 
@@ -13,8 +14,12 @@ export default function MyDataPage() {
   const [boulderProjectGrades, setBoulderProjectGrades] = useState([])
   const [avgGrade, setAvgGrade] = useState("")
   const [highestGrade, setHighestGrade] = useState("")
+  const [projectCompletion, setProjectCompletion] = useState()
+  
 
   const attemptsValueField = useRef<HTMLInputElement>(null)
+
+  const navigate = useNavigate()
 
   async function getUserInfo(){
     const res = await fetch(`https://bouldering-capstone.onrender.com/user/${username}`, {
@@ -29,6 +34,7 @@ export default function MyDataPage() {
       setCompletedBoulders(completedBouldersCount);
       setOutstandingProjects(outstandingProjectsCount);
       setUserData(data)
+      setRenderTrigger(true)
       console.log(data)
     } else console.log('fetch was unsuccessful')
   }
@@ -113,7 +119,9 @@ export default function MyDataPage() {
         // console.log(finalGrade[avgerageGradeValue])
         setAvgGrade(finalGrade[avgerageGradeValue])
       }
-    } // console.log(avgGrade, 'console log of avgGrade from calc average grade function')
+    } 
+    setRenderTrigger(true)
+    // console.log(avgGrade, 'console log of avgGrade from calc average grade function')
   }
 
   function findHighestGrade(){
@@ -140,15 +148,38 @@ export default function MyDataPage() {
     if (bestMatch) {
       setHighestGrade(bestMatch)
       // console.log(highestGrade, 'highest grade from find highest grade func')
-    }
+    }setRenderTrigger(true)
   }
 
+  function findProjectCompletionPercent(){
+    let pendingProjects = 0
+    let completedProject = 0
+
+    if (userData.moonboard_info && userData.moonboard_info.length > 0) {
+      userData.moonboard_info.forEach((boulder) => {
+        if (boulder.completed) {
+          completedProject++;
+        } else {
+          pendingProjects++;
+        }
+      });
+    }
+    const totalProjects = completedProject + pendingProjects
+    const completionPercentage = totalProjects > 0 ? ((completedProject / totalProjects) * 100).toFixed(2) : 0
+    setProjectCompletion(completionPercentage)
+    document.documentElement.style.setProperty('--completion', `${completionPercentage}%`);
+    setRenderTrigger(true)
+    console.log(projectCompletion);
+  }
+  
   useEffect(() => {
     getUserInfo()
     getAllProjectGrades()
     calculateAverageGrade()
     findHighestGrade()
+    findProjectCompletionPercent()
 
+    setRenderTrigger(true)
     setRenderTrigger(false)
   }, [renderTrigger])
 
@@ -165,11 +196,24 @@ export default function MyDataPage() {
   }, [boulderProjectGrades])
 
 
-  function followUser() {}
-
-  // function completeBoulder() {}
-
-  // function stopProjectingBoulder() {}
+  async function deleteUser() {
+    const userID = localStorage.getItem('id')
+    const res = await fetch(`https://bouldering-capstone.onrender.com/user/${userID}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    console.log('Response status:', res.status);
+    console.log('Response data:', await res.text());
+    console.log('fetch')
+    if (res.ok) {
+      localStorage.clear()
+      navigate('/')
+      console.log('user deleted')
+    } else window.alert('Failed to delete account')
+  }
 
   async function incrementAttempts(boulderID, attempts) {
     const amount = attempts + 1
@@ -181,7 +225,7 @@ export default function MyDataPage() {
       }
     })
     if (res.ok) {
-      setRenderTrigger(true)
+      setRenderTrigger(false)
       console.log('Attempts successfully incremented')
     } else window.alert('Increment Failed')
   }
@@ -198,36 +242,69 @@ export default function MyDataPage() {
         }
       });
       if (res.ok) {
-        setRenderTrigger(true);
+        setRenderTrigger(false)
         console.log('Attempts successfully adjusted');
       } else {
         window.alert('Adjustment Failed');
       }
     }
-
-
   }
 
 
-  async function removeProject(){
-    console.log('test connection')
+  async function removeProject(boulderID){
+    const res = await fetch(`https://bouldering-capstone.onrender.com/user/project/${boulderID}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    if (res.ok) {
+      setRenderTrigger(false)
+      console.log('projected boulder successfully removed')
+    } else window.alert('Failed to remove projected boulder')
   }
 
+  async function completeProject(boulderID) {
+    const res = await fetch(`https://bouldering-capstone.onrender.com/project/completed/${boulderID}/true`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    if (res.ok) {
+      setRenderTrigger(false)
+      console.log('Project completed')
+    } else window.alert('Issue With Complete')
+  }
 
-
+  async function deleteBoulder(boulderID) {
+    const res = await fetch(`https://bouldering-capstone.onrender.com/moonboard_boulder/${boulderID}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    if (res.ok) {
+      setRenderTrigger(false)
+      console.log('boulder successfully removed')
+    } else window.alert('Boulder Removal Failed')
+  }
 
   return (
     <Row id="user-info-container">
-      <Col xs={5}>
+      <Col className='profile-content' xs={4}>
         <Col id='box1'>
-          <img src="profile-image-1.jpg" alt="" />
+          <img className="profile-picture" src="/profile-image-1.jpg" alt="" />
           {username && <h3>{username}</h3>}
           {localStorage.getItem('token') && (
-                  <Button className='project-boulder-follow-button' onClick={followUser}>Follow</Button>
+                  <Button className='project-boulder-follow-button' onClick={deleteUser}>Delete Account</Button>
                 )}
         </Col>
         <Col id="box2">
-          <p>My Boulders</p>
+          <p id="user-profile-boulders-tag">My Boulders</p>
           {userData.moonboard_boulders &&
             userData.moonboard_boulders.length > 0 ? (
               userData.moonboard_boulders.map((boulder, index) => (
@@ -246,7 +323,9 @@ export default function MyDataPage() {
                     <Col><p>Finish Holds: {boulder.finish_hold ? boulder.finish_hold.join(', ') : 'N/A'}</p></Col>
                   </Row>
                   <p>Moonboard Configuration: {boulder.moonboard_configuration || 'N/A'}</p>
-                  <button>Delete Boulder</button>
+                  {localStorage.getItem('id') == boulder.setter_id && (
+                    <button className="delete-boulder-button" onClick={()=>{deleteBoulder(boulder.id)}}>Delete Boulder</button>
+                  )}
                 </div>
               ))
             ) : (
@@ -255,29 +334,81 @@ export default function MyDataPage() {
         </Col>
       </Col>
       <Col xs={7}>
-        <Row>
-          <Col id='box3'>
-            <Row className="user-average-stats-row">
-              <Col>Boulders Completed:</Col>
-              <Col className='average-climbing-data'>{completedBoulders}</Col>
+        <Row id='box3'>
+            <Row>
+              <Col xs={3} className="average-climbing-stats">
+                <p>Boulders Completed:</p>
+                <p>Average Grade:</p>
+                <p>Highest Grade:</p>
+                <p>Outstanding Projects:</p>
+              </Col>
+              <Col className="average-climbing-stats">
+                <p>{completedBoulders}</p>
+                <p>{avgGrade}</p>
+                <p>{highestGrade}</p>
+                <p>{outstandingProjects}</p>
+              </Col>
+              <Col id="progress-circle-container" xs={6}>
+              <p id="progress-label">Project Progress:</p>
+              <div className="progress-circle">
+                <svg width="100" height="100">
+                  {projectCompletion <= 15 ? (
+                    <circle
+                      className="circle red"
+                      r="45"
+                      cx="50"
+                      cy="50"
+                      strokeDasharray="283"
+                      strokeDashoffset={`calc(283 - (projectCompletion * 283 / 100))`}
+                    ></circle>
+                  ) : projectCompletion <= 35 ? (
+                    <circle
+                      className="circle pinkish-red"
+                      r="45"
+                      cx="50"
+                      cy="50"
+                      strokeDasharray="283"
+                      strokeDashoffset={`calc(283 - (projectCompletion * 283 / 100))`}
+                    ></circle>
+                  ) : projectCompletion <= 50 ? (
+                    <circle
+                      className="circle orangish-yellow"
+                      r="45"
+                      cx="50"
+                      cy="50"
+                      strokeDasharray="283"
+                      strokeDashoffset={`calc(283 - (projectCompletion * 283 / 100))`}
+                    ></circle>
+                  ) : projectCompletion <= 75 ? (
+                    <circle
+                      className="circle yellowish-lime-green"
+                      r="45"
+                      cx="50"
+                      cy="50"
+                      strokeDasharray="283"
+                      strokeDashoffset={`calc(283 - (projectCompletion * 283 / 100))`}
+                    ></circle>
+                  ) : (
+                    <circle
+                      className="circle green"
+                      r="45"
+                      cx="50"
+                      cy="50"
+                      strokeDasharray="283"
+                      strokeDashoffset={`calc(283 - (projectCompletion * 283 / 100))`}
+                    ></circle>
+                  )}
+                  <text x="50%" y="50%" className="percentage">
+                    {projectCompletion}%
+                  </text>
+                </svg>
+              </div>
+              </Col>
             </Row>
-            <Row className="user-average-stats-row">
-              <Col>Average Grade:</Col>
-              <Col className='average-climbing-data'>{avgGrade}</Col>
-            </Row>
-            <Row className="user-average-stats-row">
-              <Col>Highest Grade:</Col>
-              <Col className='average-climbing-data'>{highestGrade}</Col>
-            </Row>
-            <Row className="user-average-stats-row">
-              <Col>Outstanding Projects:</Col>
-              <Col className='average-climbing-data'>{outstandingProjects}</Col>
-            </Row>
-          </Col>
         </Row>
         <Row>
         <Col id='box4'>
-          <p>Completed Projects</p>
+          <p id="completed-projects-tag">Completed Projects</p>
           {userData.moonboard_info &&
             userData.moonboard_info.length > 0 && (
               userData.moonboard_info
@@ -286,27 +417,29 @@ export default function MyDataPage() {
                   <div className="project-entry" key={index}>
                     <Row className="project-row">
                       <Col>
-                        <p>Boulder Name: {boulder.boulder_info.boulder_name}</p>
+                        <p className="project-text">Boulder Name: {boulder.boulder_info.boulder_name}</p>
                       </Col>
-                      <Col>
-                        <p className="project-grade">Grade: {boulder.boulder_info.grade}</p>
+                      <Col xs={4}>
+                        <p className="project-grade project-text">Grade: {boulder.boulder_info.grade}</p>
                       </Col>
                     </Row>
                     <Row className="project-row">
                       <Col>
-                        <p>Attempts: {boulder.attempts}</p>
+                        <p  className="project-text">Attempts: {boulder.attempts}</p>
                       </Col>
-                      <Col>
-                        <p>Status: Completed</p>
+                      <Col xs={4}>
+                        <p  className="project-text">Status: Completed</p>
                       </Col>
                     </Row>
-                    <button onClick={()=>{removeProject()}} >Remove From Projects</button>
+                    {localStorage.getItem('id') == boulder.user_id && (
+                      <button className="remove-project-button" onClick={()=>{removeProject(boulder.id)}} >Remove From Projects</button>
+                    )}
                   </div>
                 ))
             )}
         </Col>
         <Col id='box5'>
-          <p>Pending Projects</p>
+          <p id="pending-projects-tag">Pending Projects</p>
           {userData.moonboard_info &&
           userData.moonboard_info.length > 0 && (
             userData.moonboard_info
@@ -315,22 +448,30 @@ export default function MyDataPage() {
                 <div className="project-entry" key={index}>
                   <Row className="project-row">
                     <Col>
-                      <p>Boulder Name: {boulder.boulder_info.boulder_name}</p>
+                      <p className="project-text">Boulder Name: {boulder.boulder_info.boulder_name}</p>
                     </Col>
-                    <Col>
-                      <p className="project-grade">Grade: {boulder.boulder_info.grade}</p>
+                    <Col xs={4}>
+                      <p className="project-grade project-text">Grade: {boulder.boulder_info.grade}</p>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
-                      <p>Attempts: {boulder.attempts}</p>
+                      <p className="project-text">Attempts: {boulder.attempts}</p>
                     </Col>
-                    <Col xs={8}>
-                      <button className="attemtps-plus1" onClick={() => incrementAttempts(boulder.id, boulder.attempts)}>+1</button>
-                      <input ref={attemptsValueField} className="attempts-adjust-input" type="text" />
-                      <button onClick={() => adjustAttemptsByValue(boulder.id)}>Set by Value</button>
-                    </Col>
+                    {localStorage.getItem('id') == boulder.user_id && (
+                      <Col xs={8}>
+                        <button className="attemtps-plus1" onClick={() => incrementAttempts(boulder.id, boulder.attempts)}>+1</button>
+                        <input ref={attemptsValueField} className="attempts-adjust-input" type="text" />
+                        <button onClick={() => adjustAttemptsByValue(boulder.id)}>Set by Value</button>
+                      </Col>
+                    )}
                   </Row>
+                  {localStorage.getItem('id') == boulder.user_id && (
+                    <button className="remove-project-button" onClick={()=>{completeProject(boulder.id)}} >Complete</button>
+                  )}
+                  {localStorage.getItem('id') == boulder.user_id && (
+                    <button className="remove-project-button" onClick={()=>{removeProject(boulder.id)}} >Remove From Projects</button>
+                  )}
                 </div>
               ))
           )}

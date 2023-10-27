@@ -13,6 +13,7 @@ import MyDataPage from "./Pages/MyDataPage"
 import HoldsContextProvider from "./Contexts/HoldsContextProvider"
 import UserProfilePage from "./Pages/UserProfilePage"
 import BoulderingInfoPage from "./Pages/BoulderingInfoPage"
+import Footer from "./Components/Footer"
 
 function App(): JSX.Element {
 
@@ -35,6 +36,7 @@ function App(): JSX.Element {
         <Route path="*" element={<Navigate to='/' />} />
       </Routes>
       </Container>
+      <Footer />
       </HoldsContextProvider>
     </BrowserRouter>
     </>

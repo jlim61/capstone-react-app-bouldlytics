@@ -29,7 +29,7 @@ export default function Heading() {
         <Container fluid id="nav-bar-container">
           <div className="d-flex w-100">
             <a href="#offcanvasNavbar-expand" role="button" className="me-2" onClick={handleOffcanvasToggle}>
-            <img id="bouldlytics-logo" src="bouldlytics-logo.png" alt="Toggle" />
+            <img id="bouldlytics-logo" src="/bouldlytics-logo.png" alt="Toggle" />
             </a>
             <Navbar.Brand as={NavLink} to="/" id="bouldlytics-heading">Bouldlytics</Navbar.Brand>
             <Stack id="navbar-stack" className="ms-auto" direction="horizontal">
@@ -74,10 +74,10 @@ export default function Heading() {
             <Nav className="d-flex flex-column">
             <Nav.Link href="/my-data" className="offcanvas-links offcanvas-items">My Data</Nav.Link>
             <Nav.Link href="/bouldering-info" className="offcanvas-links offcanvas-items">What is Bouldering?</Nav.Link>
-            <Nav.Link href="#action1" className="offcanvas-links offcanvas-items">Gym Boulders</Nav.Link>
             <Nav.Link href="/moonboard" className="offcanvas-links offcanvas-items">MoonBoard Boulders</Nav.Link>
-            <Nav.Link href="#action2" className="offcanvas-links offcanvas-items">Training</Nav.Link>
             <Nav.Link href="/users" className="offcanvas-links offcanvas-items">Find Boulderers</Nav.Link>
+            <Nav.Link href="#action1" className="offcanvas-links offcanvas-items">Gym Boulders (Coming Soon)</Nav.Link>
+            <Nav.Link href="#action2" className="offcanvas-links offcanvas-items">Training (Coming Soon)</Nav.Link>
           </Nav>
           </>
         }
